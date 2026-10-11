@@ -1,0 +1,10 @@
+node_modules
+.next
+*.tsbuildinfo
+.env
+.env.local
+.env*.local
+local.db*
+data/
+firmware/esp32/src/secrets.h
+.pio

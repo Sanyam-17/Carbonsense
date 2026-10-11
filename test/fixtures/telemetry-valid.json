@@ -1,0 +1,1 @@
+{"version":1,"nodeId":"room-node-01","ts":"2026-10-07T14:25:30Z","environment":{"co2Ppm":642,"temperatureC":24.2,"humidityPct":56.0},"occupancy":{"motion":true},"energy":{"voltageV":5.01,"currentA":0.21,"powerW":1.05},"flags":{"co2Warmup":false}}

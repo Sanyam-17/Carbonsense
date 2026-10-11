@@ -1,0 +1,218 @@
+{
+  "generated": "2026-10-11T04:27:22.683Z",
+  "root": "carbonsense-3d-next",
+  "stack": {
+    "next": "^15.1.0",
+    "react": "^19.0.0",
+    "typescript": "^5.6.0",
+    "three": "^0.170.0",
+    "r3f": null,
+    "drei": null,
+    "zustand": null,
+    "drizzle": "^0.38.0",
+    "sqliteClient": "^0.14.0",
+    "zod": null,
+    "auth": null,
+    "tailwind": null,
+    "prisma": null,
+    "playwright": null,
+    "vitest": null,
+    "jest": null,
+    "mqtt": null
+  },
+  "layout": [
+    [
+      "apps/web",
+      false
+    ],
+    [
+      "services/iot",
+      false
+    ],
+    [
+      "packages/shared",
+      false
+    ],
+    [
+      "firmware/esp32",
+      true
+    ],
+    [
+      "ios/RoomPlan",
+      false
+    ]
+  ],
+  "api": [
+    "app/api/devices/[id]/route.ts",
+    "app/api/energy/route.ts",
+    "app/api/health/route.ts",
+    "app/api/ingest/route.ts",
+    "app/api/login/route.ts",
+    "app/api/rooms/[id]/devices/route.ts",
+    "app/api/rooms/[id]/model/route.ts",
+    "app/api/rooms/[id]/route.ts",
+    "app/api/stream/route.ts",
+    "app/api/telemetry/route.ts"
+  ],
+  "pages": [
+    "app/analytics/page.tsx",
+    "app/device/[id]/page.tsx",
+    "app/device/page.tsx",
+    "app/env/page.tsx",
+    "app/house/page.tsx",
+    "app/login/page.tsx",
+    "app/page.tsx",
+    "app/processing/page.tsx",
+    "app/room/page.tsx",
+    "app/rooms/import/page.tsx",
+    "app/rooms/page.tsx",
+    "app/scan/page.tsx"
+  ],
+  "tables": [
+    {
+      "table": "telemetry",
+      "file": "lib/schema.ts",
+      "dialect": "sqliteTable"
+    },
+    {
+      "table": "nodes",
+      "file": "lib/schema.ts",
+      "dialect": "sqliteTable"
+    },
+    {
+      "table": "rejections",
+      "file": "lib/schema.ts",
+      "dialect": "sqliteTable"
+    },
+    {
+      "table": "devices",
+      "file": "lib/schema.ts",
+      "dialect": "sqliteTable"
+    }
+  ],
+  "instrumentation": [
+    "instrumentation.ts"
+  ],
+  "simulator": [
+    "app/api/devices/[id]/route.ts",
+    "app/page.tsx",
+    "instrumentation.ts",
+    "lib/config.ts",
+    "lib/core.mjs",
+    "lib/engine.js",
+    "lib/ingest.ts",
+    "lib/simulator.ts"
+  ],
+  "ingest": {
+    "files": [
+      "app/api/ingest/route.ts"
+    ],
+    "apiKeyHeader": false,
+    "zod": false,
+    "ranges": false,
+    "nodeId": true
+  },
+  "sse": {
+    "files": [
+      "app/api/stream/route.ts"
+    ],
+    "authCheck": false
+  },
+  "zustand": [],
+  "three": {
+    "files": [
+      "lib/engine.js"
+    ],
+    "tuples": [
+      "lib/engine.js:8: const DV={ac:{n:'AC unit',p:[-1.9,2.45,-2.85],g:[1.9,.5,.3]},light:{n:'Ceiling lamp',p:[0,2.3,0]},tv",
+      "lib/engine.js:42: function snap(){R.setSize(520,320,false);cam.aspect=520/320;cam.clearViewOffset();cam.updateProjecti",
+      "lib/engine.js:45: const W=[{p:[13,8.5,13],t:[0,1,0],o:.2},{p:[5.5,4.4,7.5],t:[-1,2,-2],o:.18},{p:[-10,5,6],t:[0,1.5,0]",
+      "lib/engine.js:52: tp=[0,1,2].map(n=>L(a.p[n],b.p[n],u));tt=[0,1,2].map(n=>L(a.t[n],b.t[n],u));to=L(a.o,b.o,u);lt=[wx(.",
+      "lib/engine.js:55: if(RT=='room'){lt=[S.l.e?1:.08,S.l.a?1:.08,S.l.c?1:.08];if(S.v2){tp=[0,19,1.4];tt=[0,0,0]}}}",
+      "lib/engine.js:83: const VW={login:{p:[12,7,12],t:[0,1,0],o:0,l:[.2,.45,.2]},scan:{p:[9,6.5,10],t:[0,1,0],o:0,l:[0,0,.0"
+    ],
+    "dims": [
+      "lib/engine.js:25: [[-3.5,.3],[3.6,-2.5],[3.3,2.6],[-3.3,-2.4]].forEach(([x,z])=>{const geo=new THREE.ConeGeometry(.34,",
+      "lib/engine.js:26: const gt=(()=>{const c=document.createElement('canvas');c.width=c.height=64;const x=c.getContext('2d",
+      "lib/engine.js:40: const HL=[['Bedroom',-8.2,2.6,-.3,'210'],['Kitchen',8.2,2.6,.3,'420'],['Living room',0,3.5,0,'']].ma",
+      "lib/engine.js:65: const c=(t*(.3+pw)+d.ph)%1;d.ring.scale.setScalar(.25+c*2.6);d.ring.material.opacity=(1-c)*(.15+.55*",
+      "lib/engine.js:90: return `<svg viewBox=\"0 0 ${W} ${H}\" style=\"width:100%;display:block\">`+[0,1,2,3].map(i=>`<line x1=\""
+    ],
+    "demand": false,
+    "gltf": false,
+    "webglGuard": false,
+    "dispose": true
+  },
+  "tz": {
+    "midnight": [],
+    "timezone": true
+  },
+  "auth": {
+    "lib": null,
+    "middleware": [
+      "middleware.ts"
+    ],
+    "home": true
+  },
+  "tests": {
+    "files": [],
+    "script": "node --test",
+    "configs": []
+  },
+  "secrets": {
+    "gitignoreHasEnv": true,
+    "trackedEnvFiles": [],
+    "publicSecretNames": []
+  },
+  "glb": [],
+  "firmware": {
+    "dir": true,
+    "platformio": true
+  },
+  "cmd": {
+    "build": {
+      "status": "Not run"
+    },
+    "test": {
+      "status": "Not run"
+    }
+  },
+  "probe": [],
+  "findings": [
+    {
+      "sev": "gap",
+      "t": "zod not found as a dependency; boundary validation cannot use the shared schema yet",
+      "ev": "package.json"
+    },
+    {
+      "sev": "gap",
+      "t": "No range checks detected in the ingest route",
+      "ev": "app/api/ingest/route.ts"
+    },
+    {
+      "sev": "gap",
+      "t": "SSE route shows no authorization check",
+      "ev": "app/api/stream/route.ts"
+    },
+    {
+      "sev": "gap",
+      "t": "Hard-coded geometry/positions in 3D code (5 dimension hits, 6 vector literals)",
+      "ev": "lib/engine.js"
+    },
+    {
+      "sev": "review",
+      "t": "frameloop=\"demand\" not detected",
+      "ev": "lib/engine.js"
+    },
+    {
+      "sev": "gap",
+      "t": "No WebGL-unavailable handling detected",
+      "ev": "lib/engine.js"
+    },
+    {
+      "sev": "gap",
+      "t": "No test files found",
+      "ev": "looked for *.test.* and *.spec.*"
+    }
+  ]
+}
