@@ -1,6 +1,6 @@
 # Current state (generated)
 
-Generated 2026-10-11T04:27:22.683Z by `tools/phase0/audit.mjs` from a static scan of `carbonsense-3d-next`. Nothing here is hand-written. "Not detected" means the scan did not find it, not that it is proven absent. Browser behaviour and hardware are **not** covered by this scan.
+Generated 2026-10-11T11:47:41.445Z by `tools/phase0/audit.mjs` from a static scan of `v0-project`. Nothing here is hand-written. "Not detected" means the scan did not find it, not that it is proven absent. Browser behaviour and hardware are **not** covered by this scan.
 
 ## Stack
 | Item | Version / value |
@@ -89,7 +89,7 @@ Vector literals (first 8 of 6):
 - Day-boundary code: 0 hit(s); timezone handling detected
 - Auth: library none; middleware middleware.ts; requireHomeAccess detected
 - Tests: 0 file(s); test script node --test; configs none
-- .gitignore ignores .env: yes; tracked env files: none
+- .gitignore ignores .env: yes; tracked env files: .env.local.example
 
 ## GLB assets
 _none detected_
@@ -97,12 +97,13 @@ _none detected_
 ## Commands
 | Check | Result | Detail |
 |---|---|---|
-| npm run build | Not run |  |
-| npm test | Not run |  |
+| npm run build | Passed | ƒ  (Dynamic)  server-rendered on demand |
+| npm test | Passed | ℹ duration_ms 148.866766 |
+| GET http://localhost:3000/api/health | 200 |  |
 
 Not run: dev server in a browser, 3D scene in a real browser, ESP32 hardware.
 
-## Findings (7)
+## Findings (8)
 | Severity | Finding | Evidence |
 |---|---|---|
 | gap | zod not found as a dependency; boundary validation cannot use the shared schema yet | `package.json` |
@@ -112,3 +113,4 @@ Not run: dev server in a browser, 3D scene in a real browser, ESP32 hardware.
 | review | frameloop="demand" not detected | `lib/engine.js` |
 | gap | No WebGL-unavailable handling detected | `lib/engine.js` |
 | gap | No test files found | `looked for *.test.* and *.spec.*` |
+| risk | Env files tracked by git | `.env.local.example` |

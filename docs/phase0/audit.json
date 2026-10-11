@@ -1,6 +1,6 @@
 {
-  "generated": "2026-10-11T04:27:22.683Z",
-  "root": "carbonsense-3d-next",
+  "generated": "2026-10-11T11:47:41.445Z",
+  "root": "v0-project",
   "stack": {
     "next": "^15.1.0",
     "react": "^19.0.0",
@@ -161,7 +161,9 @@
   },
   "secrets": {
     "gitignoreHasEnv": true,
-    "trackedEnvFiles": [],
+    "trackedEnvFiles": [
+      ".env.local.example"
+    ],
     "publicSecretNames": []
   },
   "glb": [],
@@ -171,13 +173,22 @@
   },
   "cmd": {
     "build": {
-      "status": "Not run"
+      "status": "Passed",
+      "exitCode": 0,
+      "tail": "├ ○ /rooms/import                        1.02 kB         104 kB\n└ ○ /scan                                  162 B         106 kB\n+ First Load JS shared by all             103 kB\n  ├ chunks/255-ce8c7c75002f810b.js       46.5 kB\n  ├ chunks/4bd1b696-c023c6e3521b1417.js  54.2 kB\n  └ other shared chunks (total)          1.92 kB\n\n\nƒ Middleware                             73.1 kB\n\n○  (Static)   prerendered as static content\nƒ  (Dynamic)  server-rendered on demand"
     },
     "test": {
-      "status": "Not run"
+      "status": "Passed",
+      "exitCode": 0,
+      "tail": "✔ session tokens verify, expire and reject tampering (13.16363ms)\n✔ GLB: measures a translated mesh and normalises to a room (3.023162ms)\n✔ GLB: unit conversion and implausible sizes (1.109303ms)\n✔ GLB: rejects bad magic, truncation, missing bounds, unsupported units (0.524297ms)\nℹ tests 15\nℹ suites 0\nℹ pass 15\nℹ fail 0\nℹ cancelled 0\nℹ skipped 0\nℹ todo 0\nℹ duration_ms 148.866766"
     }
   },
-  "probe": [],
+  "probe": [
+    {
+      "url": "http://localhost:3000/api/health",
+      "status": 200
+    }
+  ],
   "findings": [
     {
       "sev": "gap",
@@ -213,6 +224,11 @@
       "sev": "gap",
       "t": "No test files found",
       "ev": "looked for *.test.* and *.spec.*"
+    },
+    {
+      "sev": "risk",
+      "t": "Env files tracked by git",
+      "ev": ".env.local.example"
     }
   ]
 }
