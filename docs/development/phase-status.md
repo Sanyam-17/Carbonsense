@@ -2,7 +2,7 @@
 
 | Phase | Status |
 |---|---|
-| 0 Audit and hardware readiness | Audit done (static); your browser check and hardware checklist pending |
+| 0 Audit and hardware readiness | Audit done (static); build and tests verified; browser check and hardware checklist pending |
 | 1 ESP32 and physical sensors | Firmware written; not compiled or run on hardware |
 | 2 Ingestion and persistence | Implemented; core logic unit-tested, routes not yet run on your machine |
 | 3 Live hardware-to-3D integration | Mostly implemented: SSE, badge, DB device mappings, metering labels. Per-marker 3D states and browser check pending |
@@ -15,8 +15,8 @@
 | 10 Multi-room, quality, deployment | Not started |
 
 ## Phase 0 gate
-- [ ] `npm run build` passes (Not run)
-- [ ] existing tests pass (Not run, no test script)
+- [x] `npm run build` passes locally after the telemetry insert-type fix
+- [x] existing tests pass: 15/15 (`npm test`)
 - [ ] dev server answered the probes without error
 - [ ] 3D scene opened in a real browser and checked by a person
 - [ ] `docs/hardware/readiness-checklist.md` completed by a person

@@ -1,0 +1,16 @@
+{
+  "routes": [
+    {"path": "/", "title": "CarbonSense"},
+    {"path": "/login", "title": "Sign in"},
+    {"path": "/scan", "title": "Scan your room"},
+    {"path": "/processing", "title": "Processing scan"},
+    {"path": "/rooms", "title": "Room selection"},
+    {"path": "/rooms/import", "title": "Import room scan"},
+    {"path": "/room", "title": "Room dashboard"},
+    {"path": "/device", "title": "Device details"},
+    {"path": "/device/:id", "title": "Device details"},
+    {"path": "/house", "title": "House overview"},
+    {"path": "/analytics", "title": "Energy and carbon"},
+    {"path": "/env", "title": "Environmental data"}
+  ]
+}

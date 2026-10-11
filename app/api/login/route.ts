@@ -10,6 +10,10 @@ export async function POST(req: Request) {
   let body: any; try { body = await req.json() } catch { return Response.json({error: 'bad request'}, {status: 400}) }
   if (typeof body?.password !== 'string' || !(await safeEqual(body.password, pw))) return Response.json({error: 'invalid password'}, {status: 401})
   const token = await signSession({exp: now + 7 * 864e5}, secret)
-  return new Response(JSON.stringify({ok: true}), {headers: {'content-type': 'application/json', 'set-cookie': `cs_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=Lax; Max-Age=604800${process.env.NODE_ENV === 'production' ? '; Secure' : ''}`}})
+  const secure = process.env.NODE_ENV === 'production'
+  // Secure HTTPS previews are embedded cross-site; local HTTP keeps Lax so the
+  // cookie remains usable without Secure on a developer machine.
+  const sameSite = secure ? 'None' : 'Lax'
+  return new Response(JSON.stringify({ok: true}), {headers: {'content-type': 'application/json', 'set-cookie': `cs_session=${encodeURIComponent(token)}; Path=/; HttpOnly; SameSite=${sameSite}; Max-Age=604800${secure ? '; Secure' : ''}`}})
 }
 export async function DELETE() { return new Response(null, {status: 204, headers: {'set-cookie': 'cs_session=; Path=/; HttpOnly; Max-Age=0'}}) }

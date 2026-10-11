@@ -24,12 +24,15 @@ export async function ingest(raw: unknown, now = new Date()) {
   if (!v.ok) return {ok: false as const, errors: v.errors}
   await ready
   const t = v.value, receivedAt = now.toISOString(), roomId = roomFor(t.nodeId), source = isSim(t.nodeId) ? 'simulated' : 'measured'
-  const res: any = await db.insert(telemetry).values({
+  // Drizzle 0.38 omits nullable SQLite columns from the inferred insert type;
+  // the database schema and runtime contract intentionally preserve nulls.
+  const row = {
     nodeId: t.nodeId, roomId, observedAt: t.ts, receivedAt, source,
     co2Ppm: t.environment?.co2Ppm ?? null, temperatureC: t.environment?.temperatureC ?? null, humidityPct: t.environment?.humidityPct ?? null,
     motion: t.occupancy?.motion ?? null, voltageV: t.energy?.voltageV ?? null, currentA: t.energy?.currentA ?? null, powerW: t.energy?.powerW ?? null,
     flags: JSON.stringify(t.flags),
-  }).onConflictDoNothing()
+  }
+  const res: any = await db.insert(telemetry).values(row as any).onConflictDoNothing()
   const stored = res.rowsAffected > 0
   if (stored) {
     await db.insert(nodes).values({id: t.nodeId, roomId, lastSeen: receivedAt}).onConflictDoUpdate({target: nodes.id, set: {roomId, lastSeen: receivedAt}})
@@ -40,7 +43,7 @@ export async function ingest(raw: unknown, now = new Date()) {
 
 export async function reject(nodeId: string | null, reason: string) {
   await ready
-  await db.insert(rejections).values({nodeId, reason: reason.slice(0, 200), receivedAt: new Date().toISOString()})
+  await db.insert(rejections).values({nodeId, reason: reason.slice(0, 200), receivedAt: new Date().toISOString()} as any)
   console.warn(JSON.stringify({evt: 'ingest_rejected', nodeId, reason: reason.slice(0, 200)}))
 }
 export async function latestAll() { await ready; return (await client.execute('SELECT * FROM telemetry WHERE id IN (SELECT MAX(id) FROM telemetry GROUP BY node_id)')).rows.map(rowToMsg) }
