@@ -1,6 +1,8 @@
 // CARBONSENSE_NODE_KEYS="node-id:key,node-id2:key2" (keys must not contain ':' or ',')
 const pairs = (s?: string): Record<string, string> => Object.fromEntries((s || '').split(',').map(x => x.trim().split(':')).filter(p => p.length === 2 && p[0] && p[1]))
-export const roomFor = (nodeId: string) => pairs(process.env.CARBONSENSE_NODE_ROOMS)[nodeId] || 'room-204'
+// A node without an explicit deployment mapping must never be routed into a
+// built-in room. Returning null lets ingestion reject the payload honestly.
+export const roomFor = (nodeId: string) => pairs(process.env.CARBONSENSE_NODE_ROOMS)[nodeId] || null
 export const isSim = (nodeId: string) => nodeId.startsWith('sim-') // simulated sources are never labelled "measured"
 export const homeTz = () => process.env.CARBONSENSE_HOME_TZ || 'UTC'
 export const sampleIntervalS = () => +(process.env.CARBONSENSE_SAMPLE_INTERVAL_S || 5)

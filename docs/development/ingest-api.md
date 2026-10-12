@@ -10,7 +10,7 @@ Setup: `cp .env.local.example .env.local`, `npm install`, `npm run dev`. The bui
 
 Both GET routes are **unauthenticated** until Phase 8; keep this on localhost.
 
-Rules implemented: per-node keys (hashed compare), range validation (whole payload rejected if any value is out of range, null = sensor unavailable), duplicate `(node, observedAt)` ignored, one `ingest()` for HTTP and simulator, clock skew > 5 min flagged, UI states live / stale / offline from server receipt time.
+Rules implemented: per-node keys (hashed compare), explicit node-to-room authorization (unmapped nodes are rejected; there is no room fallback), range validation (whole payload rejected if any value is out of range, null = sensor unavailable), duplicate `(node, observedAt)` ignored, one `ingest()` for HTTP and simulator, clock skew > 5 min flagged, out-of-order history retained without replacing the newest node snapshot, UI states live / stale / offline from server receipt time.
 
 Bench test: `npm run send:sample -- --co2 900` (node `sim-bench-01`, shows as simulated). Posting as `room-node-01` shows as **measured**; do that only to bench-test and delete `local.db` before any demo or report.
 Mapping: the INA219 power reading drives the "Smart plug" device; AC, TV and lamp remain estimated. Total power still sums measured and estimated values; labelling that split is Phase 6/7 work.

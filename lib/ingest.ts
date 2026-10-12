@@ -24,6 +24,7 @@ export async function ingest(raw: unknown, now = new Date()) {
   if (!v.ok) return {ok: false as const, errors: v.errors}
   await ready
   const t = v.value, receivedAt = now.toISOString(), roomId = roomFor(t.nodeId), source = isSim(t.nodeId) ? 'simulated' : 'measured'
+  if (!roomId) return {ok: false as const, errors: ['node is not mapped to an authorized room']}
   // Drizzle 0.38 omits nullable SQLite columns from the inferred insert type;
   // the database schema and runtime contract intentionally preserve nulls.
   const row = {
@@ -32,10 +33,16 @@ export async function ingest(raw: unknown, now = new Date()) {
     motion: t.occupancy?.motion ?? null, voltageV: t.energy?.voltageV ?? null, currentA: t.energy?.currentA ?? null, powerW: t.energy?.powerW ?? null,
     flags: JSON.stringify(t.flags),
   }
+  const previous = await client.execute({sql: 'SELECT MAX(observed_at) AS observed_at FROM telemetry WHERE node_id=?', args: [t.nodeId]})
+  const previousObserved = previous.rows[0]?.observed_at as string | null | undefined
   const res: any = await db.insert(telemetry).values(row as any).onConflictDoNothing()
   const stored = res.rowsAffected > 0
   if (stored) {
-    await db.insert(nodes).values({id: t.nodeId, roomId, lastSeen: receivedAt}).onConflictDoUpdate({target: nodes.id, set: {roomId, lastSeen: receivedAt}})
+    // History is retained, but the node health snapshot advances only when
+    // this sample is newer than the latest observed measurement.
+    if (!previousObserved || t.ts > previousObserved) {
+      await db.insert(nodes).values({id: t.nodeId, roomId, lastSeen: receivedAt}).onConflictDoUpdate({target: nodes.id, set: {roomId, lastSeen: receivedAt}})
+    }
     bus.emit('t', {nodeId: t.nodeId, roomId, source, observedAt: t.ts, receivedAt, environment: pick(t.environment, ['co2Ppm', 'temperatureC', 'humidityPct']), occupancy: t.occupancy, energy: pick(t.energy, ['voltageV', 'currentA', 'powerW']), flags: t.flags})
   }
   return {ok: true as const, stored, duplicate: !stored}
@@ -46,7 +53,7 @@ export async function reject(nodeId: string | null, reason: string) {
   await db.insert(rejections).values({nodeId, reason: reason.slice(0, 200), receivedAt: new Date().toISOString()} as any)
   console.warn(JSON.stringify({evt: 'ingest_rejected', nodeId, reason: reason.slice(0, 200)}))
 }
-export async function latestAll() { await ready; return (await client.execute('SELECT * FROM telemetry WHERE id IN (SELECT MAX(id) FROM telemetry GROUP BY node_id)')).rows.map(rowToMsg) }
+export async function latestAll() { await ready; return (await client.execute('SELECT t.* FROM telemetry t JOIN (SELECT node_id, MAX(observed_at) AS observed_at FROM telemetry GROUP BY node_id) x ON x.node_id=t.node_id AND x.observed_at=t.observed_at')).rows.map(rowToMsg) }
 export async function recent(limit: number, nodeId?: string | null) {
   await ready
   const r = nodeId ? await client.execute({sql: 'SELECT * FROM telemetry WHERE node_id=? ORDER BY id DESC LIMIT ?', args: [nodeId, limit]}) : await client.execute({sql: 'SELECT * FROM telemetry ORDER BY id DESC LIMIT ?', args: [limit]})
